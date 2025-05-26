@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using RetailApp.Data;
 using RetailApp.Data.Repositories;
@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var env = builder.Environment;
 
 // Add services to the container.
 
@@ -33,8 +34,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-            ValidateIssuer = false,
-            ValidateAudience = false
+            ValidateIssuer = env.IsProduction(),    // ✅ strict in prod
+            ValidateAudience = env.IsProduction(),  // ✅ strict in prod
+
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"]
         };
     });
 builder.Services.AddAuthorization();
