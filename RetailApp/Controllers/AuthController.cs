@@ -74,6 +74,8 @@ namespace RetailApp.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],           // ✅ Add this
+                audience: _config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);
