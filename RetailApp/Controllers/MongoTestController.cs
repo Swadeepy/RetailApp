@@ -9,7 +9,7 @@ public class MongoTestController : ControllerBase
     [HttpGet("ping")]
     public async Task<IActionResult> PingMongo()
     {
-        var host = "cluster0-shard-00-00.r7aq8ix.mongodb.net";
+        var host = "cluster0.r7aq8ix.mongodb.net";
         var port = 27017;
         var results = new List<string>();
 
