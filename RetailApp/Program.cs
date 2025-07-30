@@ -24,6 +24,7 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+//options.UseSqlServer("Server=DESKTOP-FJ4QOOT\\SQLEXPRESS;Database=RetailStoreDB;User Id=sa;Password=Swadeep@1718;TrustServerCertificate=True;"));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

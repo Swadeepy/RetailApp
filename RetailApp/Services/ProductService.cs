@@ -9,11 +9,13 @@ namespace RetailApp.Services
     {
         private readonly MongoDbContext _mongo;
         private readonly IWebHostEnvironment _env;
+        private readonly string _blobConnectionString;
 
-        public ProductService(MongoDbContext mongo, IWebHostEnvironment env)
+        public ProductService(MongoDbContext mongo, IWebHostEnvironment env, IConfiguration config)
         {
             _mongo = mongo;
             _env = env;
+            _blobConnectionString = config["BlobStorage:ConnectionString"];
         }
 
         public async Task SaveProductAsync(ProductDto dto)
@@ -32,6 +34,9 @@ namespace RetailApp.Services
 
                     using var stream = new FileStream(filePath, FileMode.Create);
                     await image.CopyToAsync(stream);
+
+                    var blobService = new BlobStorageService(_blobConnectionString);
+                    await blobService.UploadFileAsync(filePath, uniqueName);
 
                     imageUrls.Add($"/uploads/{uniqueName}");
                 }
